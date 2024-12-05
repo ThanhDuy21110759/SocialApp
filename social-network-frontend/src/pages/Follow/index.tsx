@@ -68,80 +68,86 @@ const FollowPage: React.FC = () => {
             >
               <Scrollbar sx={{ maxHeight: "600px", paddingRight: "10px" }}>
                 <Box>
-                  {NonFollowing.map((request, index) => (
-                    <ButtonBase
-                      key={index}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "5px",
-                        borderRadius: "5px",
-                        width: "100%",
-                        marginBottom: "12px",
-                        paddingBottom: "10px",
-                      }}
-                      onClick={() => {
-                        dispatch(dialogStore.setSelectedProfile(request));
-                        dispatch(dialogStore.setIsSelectedProfile(false));
-                        dispatch(dialogStore.actionToSetProfilePost());
-                      }}
-                    >
-                      <Box
+                  {NonFollowing && NonFollowing.length > 0 ? (
+                    NonFollowing.map((request, index) => (
+                      <ButtonBase
+                        key={index}
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          width: "70%",
+                          justifyContent: "space-between",
+                          padding: "5px",
+                          borderRadius: "5px",
+                          width: "100%",
+                          marginBottom: "12px",
+                          paddingBottom: "10px",
+                        }}
+                        onClick={() => {
+                          dispatch(dialogStore.setSelectedProfile(request));
+                          dispatch(dialogStore.setIsSelectedProfile(false));
+                          dispatch(dialogStore.actionToSetProfilePost());
                         }}
                       >
-                        <Avatar
-                          src={request.avatar}
-                          alt={request.firstName + " " + request.lastName}
-                          sx={{ marginRight: "10px" }}
-                        />
                         <Box
                           sx={{
                             display: "flex",
-                            flexDirection: "column",
-                            alignItems: "flex-start",
-                            maxWidth: "70%",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
+                            alignItems: "center",
+                            width: "70%",
                           }}
                         >
-                          <Typography variant="subtitle2" color="black">
-                            {request.firstName +
-                              " " +
-                              request.middleName +
-                              " " +
-                              request.lastName}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {request.username}
-                          </Typography>
+                          <Avatar
+                            src={request.avatar}
+                            alt={request.firstName + " " + request.lastName}
+                            sx={{ marginRight: "10px" }}
+                          />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              maxWidth: "70%",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            <Typography variant="subtitle2" color="black">
+                              {request.firstName +
+                                " " +
+                                request.middleName +
+                                " " +
+                                request.lastName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {request.username}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
-
-                      <Box sx={{ display: "flex", gap: "5px", zIndex: "10" }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          sx={{ zIndex: "10" }}
-                          onClick={() => {
-                            dispatch(
-                              followStore.createFollowRequest(
-                                request.createdBy.uuid
-                              )
-                            );
-                          }}
-                        >
-                          {t("follow.follow")}
-                        </Button>
-                      </Box>
-                    </ButtonBase>
-                  ))}
+                        <Box sx={{ display: "flex", gap: "5px", zIndex: "10" }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            sx={{ zIndex: "10" }}
+                            onClick={() => {
+                              dispatch(
+                                followStore.createFollowRequest(
+                                  request.createdBy.uuid
+                                )
+                              );
+                            }}
+                          >
+                            {t("follow.follow")}
+                          </Button>
+                        </Box>
+                      </ButtonBase>
+                    ))
+                  ) : (
+                    <div>
+                      {/* Display message when NonFollowing is empty or undefined */}
+                      <p>Empty Following</p>
+                    </div>
+                  )}
                 </Box>
               </Scrollbar>
             </Box>

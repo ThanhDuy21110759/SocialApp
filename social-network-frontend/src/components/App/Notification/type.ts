@@ -4,17 +4,17 @@ export type NotificationType = {
   message: string;
   imagesUrl: string | null;
   type:
-    | "order_placed"
-    | "friend_interactive"
-    | "chat_message"
-    | "mail"
-    | "order_shipped"
-    | "friend_request"
-    | "profile_update"
-    | "order_delivered"
-    | "system_alert"
-    | "promotion"
-    | "payment";
+    | "ORDER_PLACED"
+    | "FRIEND_INTERACTIVE"
+    | "CHAT_MESSAGE"
+    | "MAIL"
+    | "ORDER_SHIPPED"
+    | "FRIEND_REQUEST"
+    | "PROFILE_UPDATE"
+    | "ORDER_DELIVERED"
+    | "SYSTEM_ALERT"
+    | "PROMOTION"
+    | "PAYMENT";
   createdAt: Date;
   unread: boolean;
 };

@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from "@mui/material";
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import File from "../pages/Admin/File";
@@ -31,17 +32,30 @@ const ListFriend = lazy(() => import("../../src/pages/Friends/ListFriend"));
 const ProfilePage = lazy(() => import("../../src/pages/Profile/ProfilePage"));
 const FollowPage = lazy(() => import("../../src/pages/Follow/index"));
 const FollowingList = lazy(() => import("../../src/pages/FollowList/index"));
+const NotFoundPage = lazy(() => import("../pages/404"));
 const FollowFeed = lazy(() => import("../../src/pages/Feeds/FollowFeed/index"));
 const FriendFeed = lazy(() => import("../../src/pages/Feeds/FriendFeed/index"));
-
 const AppRouter = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      }
+    >
       <Routes>
         {/* element={<Navigate to="/auth/login" replace />} */}
         <Route path="/">
           <Route path="" element={<MainPage />} />
           <Route path="feeds" element={<FeedTable />} />
+          {/* <Route path="feeds/like" element={<>Yeu thich</>} /> */}
+          {/* <Route path="feeds/list" element={<>ban be</>} /> */}
           <Route path="feeds/follows" element={<FollowFeed />} />
           <Route path="feeds/friends" element={<FriendFeed />} />
           <Route path="friends" element={<FriendPage />} />
@@ -71,7 +85,7 @@ const AppRouter = () => {
         <Route path="/socket" element={<Socket />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/download" element={<Download />} />
-        <Route path="*" element={<>Not Found Page</>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

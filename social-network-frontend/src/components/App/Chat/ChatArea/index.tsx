@@ -14,9 +14,6 @@ import {
   UserHeadingStyle,
 } from "./styles";
 
-import { selectSelectedUserUUID } from "../../../../store/reducers/user.reducer";
-import LineChat from "../LineChat";
-
 import SendIcon from "@mui/icons-material/Send";
 import {
   Avatar,
@@ -26,6 +23,9 @@ import {
   OutlinedInput,
   Typography,
 } from "@mui/material";
+import { AssemblyAI } from "assemblyai";
+import { selectSelectedUserUUID } from "../../../../store/reducers/user.reducer";
+import LineChat from "../LineChat";
 
 import { Client, Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -81,7 +81,6 @@ const ChatArea: React.FC = () => {
 
     // Function to handle successful connection
     const onConnect = () => {
-      console.log("Connected to WebSocket successfully.");
       stompClient.subscribe(
         `/user/${uuid}/queue/messages/${selectedUserUUID?.uuid}`,
         (message) => {
@@ -117,20 +116,46 @@ const ChatArea: React.FC = () => {
           },
         ],
       };
-      try {
-        stompClient.publish({
-          destination: "/app/chat",
-          body: JSON.stringify(chatMessage),
-        });
-      } catch (error) {
-        console.error("Failed to send message:", error);
-      }
+      // const isMessageValid = await checkToxicLanguage(newMessage); // Await response directly
+      // if (isMessageValid) {
+      stompClient.publish({
+        destination: "/app/chat",
+        body: JSON.stringify(chatMessage),
+      });
       setNewMessage("");
       getChat();
+      // } else {
+      //   console.warn("Toxic language detected, message not sent.");
+      // }
     } else {
       console.error("STOMP client is not connected.");
     }
   };
+  const checkToxicLanguage = async (message: string) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8081/ToxicLanguage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        console.error(
+          `Failed to check toxic language. Status: ${response.status}`
+        );
+        return false;
+      }
+
+      const { passValidate } = await response.json();
+      return passValidate; // Directly return the value without extra variable creation
+    } catch (error) {
+      console.error("Error checking toxic language:", error);
+      return false;
+    }
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(event.target.value); // Set the new message
   };
@@ -139,6 +164,88 @@ const ChatArea: React.FC = () => {
       sendMessage();
     }
   };
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
+    null
+  );
+  const [transcriptionClient, setTranscriptionClient] =
+    useState<AssemblyAI | null>(null);
+  const [transcript, setTranscript] = useState<string>("");
+  useEffect(() => {
+    const client = new AssemblyAI({
+      apiKey: "1c0ac34eb4d542f8996c0310042be8fd",
+    });
+    setTranscriptionClient(client);
+  }, []);
+
+  // New method for real-time transcription
+  const startRecording = async () => {
+    setTranscript("");
+    setNewMessage("");
+    if (!transcriptionClient) {
+      console.error("Transcription client is not initialized.");
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    setAudioStream(stream);
+
+    // Create a MediaRecorder
+    const recorder = new MediaRecorder(stream);
+    setMediaRecorder(recorder);
+
+    const audioChunks: Blob[] = [];
+
+    recorder.ondataavailable = (event) => {
+      audioChunks.push(event.data);
+    };
+
+    recorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+      // Send audio to AssemblyAI for transcription
+      const response = await transcriptionClient.transcripts.transcribe({
+        audio: audioBlob,
+      });
+      if (response) {
+        setTranscript(response.text || "");
+      }
+
+      // Start recording
+    };
+    recorder.start();
+    setIsRecording(true);
+  };
+
+  const stopRecording = () => {
+    if (!mediaRecorder) {
+      console.warn("MediaRecorder is not initialized.");
+      return;
+    }
+
+    if (mediaRecorder.state === "recording") {
+      mediaRecorder.stop(); // Stop the recorder
+      setIsRecording(false); // Update the recording state
+      if (audioStream) {
+        // Stop all tracks in the audio stream
+        audioStream.getTracks().forEach((track) => track.stop());
+        setAudioStream(null);
+      }
+
+      setMediaRecorder(null); // Reset media recorder
+    } else {
+      console.warn(
+        "No active recording to stop. Current state:",
+        mediaRecorder.state
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (transcript) {
+      setNewMessage(transcript);
+    }
+  }, [transcript]);
   return (
     <ChatAreaStyle>
       <HeadingStyle>
@@ -202,31 +309,39 @@ const ChatArea: React.FC = () => {
               ))
           : null}
       </DisplayChatStyle>
-      <ChatInputStyle>
-        <MicRoundedIcon
-          sx={{
-            color: "black",
-            marginRight: 0,
-            marginLeft: "auto",
-            fontSize: "30px",
-          }}
-        />
-        <FormControl fullWidth sx={{ m: 1 }}>
-          <OutlinedInput
-            value={newMessage}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder={t("chat.typeMessage")}
+      {selectedUserUUID !== null ? (
+        <ChatInputStyle>
+          <MicRoundedIcon
+            sx={{
+              backgroundColor: isRecording ? "#66FF00" : "#0070BB",
+              borderRadius: "30%",
+              // padding: 3,
+              fontSize: "40px",
+              transition: "background-color 0.3s ease",
+              "&:hover": {
+                backgroundColor: isRecording ? "#00B9E8" : "#003262",
+              },
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            }}
+            onClick={isRecording ? stopRecording : startRecording}
           />
-        </FormControl>
-        <Button
-          onClick={sendMessage}
-          variant="contained"
-          endIcon={<SendIcon />}
-        >
-          {t("chat.send")}
-        </Button>
-      </ChatInputStyle>
+          <FormControl fullWidth sx={{ m: 1 }}>
+            <OutlinedInput
+              value={newMessage}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder={t("chat.typeMessage")}
+            />
+          </FormControl>
+          <Button
+            onClick={sendMessage}
+            variant="contained"
+            endIcon={<SendIcon />}
+          >
+            {t("chat.send")}
+          </Button>
+        </ChatInputStyle>
+      ) : null}
     </ChatAreaStyle>
   );
 };

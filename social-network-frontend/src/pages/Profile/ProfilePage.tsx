@@ -9,7 +9,17 @@ const ProfilePage = () => {
       <HeaderNotification number={3} />
       <Box sx={{ padding: "0px 50px" }}>
         <Navbar />
-        <Profile />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ width: "80%" }}>
+            <Profile />
+          </Box>
+        </Box>
       </Box>
     </>
   );

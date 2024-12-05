@@ -105,7 +105,6 @@ export default function AccountPopover() {
           destination: "/app/user.disconnectUser",
           body: JSON.stringify(user),
         });
-        console.log("send successfully");
         stompClient.deactivate();
       } catch (error) {
         console.error("Failed to send message:", error);
@@ -126,15 +125,12 @@ export default function AccountPopover() {
 
   const handleLogout = () => {
     setOpen(null);
-    // remove cookies
     const cookies = document.cookie.split(";");
     cookies.forEach((cookie) => {
       const cookieName = cookie.split("=")[0].trim();
       document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     });
     sendDisConnect(uuid);
-    console.log("Logout successfully!!!!");
-    // redirect to login page
     navigate("/auth/login", { replace: true });
   };
 

@@ -220,7 +220,7 @@ function renderContent(notification: NotificationType) {
   let avatar;
 
   switch (notification.type) {
-    case "order_placed":
+    case "ORDER_PLACED":
       avatar = (
         <img
           alt={notification.title}
@@ -229,7 +229,7 @@ function renderContent(notification: NotificationType) {
       );
       break;
 
-    case "order_shipped":
+    case "ORDER_SHIPPED":
       avatar = (
         <img
           alt={notification.title}
@@ -238,7 +238,7 @@ function renderContent(notification: NotificationType) {
       );
       break;
 
-    case "mail":
+    case "MAIL":
       avatar = (
         <img
           alt={notification.title}
@@ -247,7 +247,7 @@ function renderContent(notification: NotificationType) {
       );
       break;
 
-    case "chat_message":
+    case "FRIEND_INTERACTIVE":
       avatar = (
         <img
           alt={notification.title}

@@ -8,7 +8,7 @@ const NOTIFICATIONS: NotificationType[] = [
     title: "Your order is placed",
     message: "waiting for shipping",
     imagesUrl: null,
-    type: "order_placed",
+    type: "ORDER_PLACED",
     createdAt: set(new Date(), { hours: 10, minutes: 30 }),
     unread: true,
   },

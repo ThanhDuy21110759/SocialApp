@@ -35,6 +35,7 @@ import PostFooter from "../../components/App/News/PostFooter";
 import PostHeader from "../../components/App/News/PostHeader";
 import PostReaction from "../../components/App/News/PostReaction";
 import {
+  commonStore,
   dialogStore,
   imagesStore,
   postStore,
@@ -83,9 +84,35 @@ const MainPage = () => {
     setMode(event.target.value);
   };
 
+  const checkToxicLanguage = async (message: string) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8081/ToxicLanguage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        console.error(
+          `Failed to check toxic language. Status: ${response.status}`
+        );
+        return false;
+      }
+
+      const { passValidate } = await response.json();
+      return passValidate; // Directly return the value without extra variable creation
+    } catch (error) {
+      console.error("Error checking toxic language:", error);
+      return false;
+    }
+  };
   // Message for new post
   const [message, setMessage] = useState("");
-  const handleChangeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeMessage = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setMessage(event.target.value);
   };
 
@@ -105,9 +132,16 @@ const MainPage = () => {
   const removeImage = (index: number) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
-  const handleCreateNewPost = () => {
-    dispatch(imagesStore.actions.setImageList(images));
-    dispatch(imagesStore.uploadImagesToCloud());
+  const handleCreateNewPost = async () => {
+    const checker = await checkToxicLanguage(message);
+    if (checker) {
+      dispatch(imagesStore.actions.setImageList(images));
+      dispatch(imagesStore.uploadImagesToCloud());
+    } else {
+      dispatch(
+        commonStore.actions.setErrorMessage("Your status has toxic language")
+      );
+    }
   };
 
   useEffect(() => {

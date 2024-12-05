@@ -100,89 +100,93 @@ const FriendSuggestionPage: React.FC = () => {
             >
               <Scrollbar sx={{ maxHeight: "600px", paddingRight: "5px" }}>
                 <Box>
-                  {FriendSuggestions.map((request, index) => (
-                    <ButtonBase
-                      key={index}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "5px",
-                        borderRadius: "5px",
-                        width: "100%",
-                        marginBottom: "12px",
-                        paddingBottom: "10px",
-                      }}
-                      onClick={() => {
-                        dispatch(dialogStore.setSelectedProfile(request));
-                        dispatch(dialogStore.setIsSelectedProfile(false)); // set state in case choice tab
-                        dispatch(dialogStore.actionToSetProfilePost()); // call to get posts data for profile
-                      }}
-                    >
-                      <Box
+                  {FriendSuggestions.length > 0 ? (
+                    FriendSuggestions.map((request, index) => (
+                      <ButtonBase
+                        key={index}
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          width: "70%",
+                          justifyContent: "space-between",
+                          padding: "5px",
+                          borderRadius: "5px",
+                          width: "100%",
+                          marginBottom: "12px",
+                          paddingBottom: "10px",
+                        }}
+                        onClick={() => {
+                          dispatch(dialogStore.setSelectedProfile(request));
+                          dispatch(dialogStore.setIsSelectedProfile(false)); // set state in case choice tab
+                          dispatch(dialogStore.actionToSetProfilePost()); // call to get posts data for profile
                         }}
                       >
-                        <Avatar
-                          src={request.avatar}
-                          alt={request.firstName + " " + request.lastName}
-                          sx={{ marginRight: "10px" }}
-                        />
                         <Box
                           sx={{
                             display: "flex",
-                            flexDirection: "column",
-                            alignItems: "flex-start",
-                            maxWidth: "70%",
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
+                            alignItems: "center",
+                            width: "70%",
                           }}
                         >
-                          <Typography variant="subtitle2" color="black">
-                            {request.firstName +
-                              " " +
-                              request.middleName +
-                              " " +
-                              request.lastName}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {request.username}
-                          </Typography>
+                          <Avatar
+                            src={request.avatar}
+                            alt={request.firstName + " " + request.lastName}
+                            sx={{ marginRight: "10px" }}
+                          />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              maxWidth: "70%",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            <Typography variant="subtitle2" color="black">
+                              {request.firstName +
+                                " " +
+                                request.middleName +
+                                " " +
+                                request.lastName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {request.username}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
 
-                      <Box
-                        sx={{
-                          display: "flex",
-                          zIndex: "10",
-                          width: "30%",
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          sx={{ zIndex: "10" }}
-                          onClick={() => {
-                            // remove friend suggestion
-                            dispatch(
-                              friendStore.actions.removeFriendSuggestion(
-                                request.id
-                              )
-                            );
-                            // call API to add friend
-                            callAPIAddFriend(request.createdBy.uuid);
+                        <Box
+                          sx={{
+                            display: "flex",
+                            zIndex: "10",
+                            width: "30%",
                           }}
                         >
-                          {t("friend.add")}
-                        </Button>
-                      </Box>
-                    </ButtonBase>
-                  ))}
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            sx={{ zIndex: "10" }}
+                            onClick={() => {
+                              // remove friend suggestion
+                              dispatch(
+                                friendStore.actions.removeFriendSuggestion(
+                                  request.id
+                                )
+                              );
+                              // call API to add friend
+                              callAPIAddFriend(request.createdBy.uuid);
+                            }}
+                          >
+                            {t("friend.add")}
+                          </Button>
+                        </Box>
+                      </ButtonBase>
+                    ))
+                  ) : (
+                    <>Empty</>
+                  )}
                 </Box>
               </Scrollbar>
             </Box>

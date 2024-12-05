@@ -6,7 +6,6 @@ import { sagaGetList } from "../reducers/chat.reducer";
 
 function* fetchUserChat(action: ReturnType<typeof sagaGetList>) {
   const { senderUUID, receiverUUID } = action.payload;
-  console.log(`senderid : ${senderUUID} , receiverID :${receiverUUID}`);
   try {
     const responseData = yield* call(
       chatApi.getChatList,

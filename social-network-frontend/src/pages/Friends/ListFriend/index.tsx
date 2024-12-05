@@ -1,3 +1,5 @@
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   Avatar,
   Box,
@@ -8,14 +10,12 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Scrollbar from "../../../components/App/Common/Scrollbar/Scrollbar";
 import { HeaderDashboard } from "../../../components/App/Header/Header";
 import Navbar from "../../../components/App/Navbar/Navbar";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import Scrollbar from "../../../components/App/Common/Scrollbar/Scrollbar";
-import { useNavigate } from "react-router-dom";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SearchCustom from "../../../components/App/SeachBar/index";
-import { useDispatch, useSelector } from "react-redux";
 import { commonStore, dialogStore, friendStore } from "../../../store/reducers";
 import Profile from "../../Profile";
 import React, { useEffect, useState } from "react";

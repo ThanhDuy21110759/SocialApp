@@ -62,7 +62,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set PORT=3001 && cross-env GENERATE_SOURCEMAP=false react-scripts start",
+    "start": "set PORT=3000 && cross-env GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -54,7 +54,7 @@ services:
       REACT_APP_CLOUDINARY_URL: https://res.cloudinary.com/dtrb7dkmw/image/upload/
       REACT_APP_SERVER_LLM: http://127.0.0.1:8082/
     ports:
-      - "3001:3001"
+      - "3000:3000"
     depends_on:
       - spring-social
     networks:

@@ -20,7 +20,7 @@ RUN yarn install
 RUN yarn build
 
 # port
-EXPOSE 3001
+EXPOSE 3000
 
 # start app
 CMD ["yarn", "start"]

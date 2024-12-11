@@ -33,4 +33,4 @@ def handle_toxic_language():
 
 
 if __name__ == "__main__":
-    app.run(port=8081, host="0.0.0.0")  # Debugging enabled here
+    app.run(port=8082, host="0.0.0.0")  # Debugging enabled here

@@ -22,7 +22,7 @@ services:
       context: ./social-network-backend
       dockerfile: Dockerfile
     ports:
-      - "8081:8080"
+      - "8080:8080"
     volumes:
       - ./locale:/locale
     depends_on:
@@ -49,12 +49,12 @@ services:
       context: ./social-network-frontend
       dockerfile: Dockerfile
     environment:
-      REACT_APP_BACKEND_URL: http://spring-social:8081/
+      REACT_APP_BACKEND_URL: http://spring-social:8080/
       REACT_APP_FRONTEND_URL: /
       REACT_APP_CLOUDINARY_URL: https://res.cloudinary.com/dtrb7dkmw/image/upload/
       REACT_APP_SERVER_LLM: http://127.0.0.1:8082/
     ports:
-      - "3001:3000"
+      - "3001:3001"
     depends_on:
       - spring-social
     networks:

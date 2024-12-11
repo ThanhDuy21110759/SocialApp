@@ -35,4 +35,4 @@ build/
 ### IntelliJ files ###
 .idea/
 target/
-.env
+

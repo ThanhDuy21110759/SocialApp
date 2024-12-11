@@ -66,4 +66,3 @@ volumes:
 networks:
   social-network-net:
     driver: bridge
-    external: true

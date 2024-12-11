@@ -52,6 +52,7 @@ services:
       REACT_APP_BACKEND_URL: http://localhost:8081/
       REACT_APP_FRONTEND_URL: /
       REACT_APP_CLOUDINARY_URL: https://res.cloudinary.com/dtrb7dkmw/image/upload/
+      REACT_APP_SERVER_LLM: http://172.16.28.38:8082/
     ports:
       - "3001:3000"
     depends_on:

@@ -49,7 +49,7 @@ services:
       context: ./social-network-frontend
       dockerfile: Dockerfile
     environment:
-      REACT_APP_BACKEND_URL: http://spring-social:8080/
+      REACT_APP_BACKEND_URL: http://34.146.175.18:8080/
       REACT_APP_FRONTEND_URL: /
       REACT_APP_CLOUDINARY_URL: https://res.cloudinary.com/dtrb7dkmw/image/upload/
       REACT_APP_SERVER_LLM: http://127.0.0.1:8082/

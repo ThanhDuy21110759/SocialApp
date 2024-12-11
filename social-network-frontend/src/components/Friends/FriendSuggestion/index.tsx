@@ -47,7 +47,7 @@ const FriendSuggestion = () => {
       <Box sx={{ margin: "10px", flex: 1 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Typography variant="subtitle1">
-            Những người bạn có thể biết
+            {t("friend.suggestFriend")}
           </Typography>
           <Link to="/friends/suggestions">
             <Typography variant="subtitle2">{t("friend.viewAll")}</Typography>

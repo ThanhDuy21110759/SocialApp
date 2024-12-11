@@ -92,12 +92,20 @@ const mainMenuItemList: PageMenuItem[] = [
 
 const bottomMenuItem: PageMenuItem[] = [
   {
-    name: "Setting",
+    name: "Profile",
+    storeName: null,
+    path: "/profile",
+    icon: "person2Icon",
+    isOpen: false,
+    childrenPages: null,
+  },
+  {
+    name: "Logout",
     storeName: null,
     path: null,
-    icon: "settingsIcon",
+    icon: "exitToAppIcon",
     isOpen: false,
-    childrenPages: [],
+    childrenPages: null,
   },
 ];
 

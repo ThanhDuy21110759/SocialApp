@@ -19,6 +19,7 @@ export interface UserInfo {
   username: string;
   lastUpdateAt: any;
   status: string;
+  postId: string;
 }
 export interface ProfileOwner {
   firstName: string;
@@ -40,6 +41,7 @@ const PostHeader: React.FC<UserInfo> = ({
   username,
   lastUpdateAt,
   status,
+  postId,
 }) => {
   const dispatch = useDispatch();
   const [userProfile, setUserProfile] = React.useState<ProfileOwner | null>(
@@ -113,10 +115,14 @@ const PostHeader: React.FC<UserInfo> = ({
 
       {/* Action Buttons */}
       <ActionButtons>
-        <IconButton>
+        {/* <IconButton>
           <MoreHorizIcon />
-        </IconButton>
-        <IconButton>
+        </IconButton> */}
+        <IconButton
+          onClick={() => {
+            dispatch(postStore.updateStatusPost(postId, "FRIENDS"));
+          }}
+        >
           <CloseIcon />
         </IconButton>
       </ActionButtons>

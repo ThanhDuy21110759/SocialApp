@@ -6,6 +6,7 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   Divider,
@@ -77,6 +78,7 @@ const MainPage = () => {
   const selectImageUploadList = useSelector(imagesStore.selectImageUploadList);
   const selectedPost = useSelector(dialogStore.selectSelectedPost);
   const completeUpload = useSelector(imagesStore.selectCompleteUpload);
+  const loadingCreateNewPost = useSelector(dialogStore.selectCreateNewPost);
 
   // Change state public or private
   const [mode, setMode] = useState("public");
@@ -86,13 +88,16 @@ const MainPage = () => {
 
   const checkToxicLanguage = async (message: string) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8081/ToxicLanguage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_LLM}ToxicLanguage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message }),
+        }
+      );
 
       if (!response.ok) {
         console.error(
@@ -239,6 +244,7 @@ const MainPage = () => {
                     lastUpdateAt={selectedPost.createdDateAt}
                     uuid={selectedPost.user.uuid}
                     status={selectedPost.status}
+                    postId={selectedPost.uuid}
                   />
                   <PostContent
                     messages={fToConvertStringToListString(
@@ -425,8 +431,14 @@ const MainPage = () => {
                     />
                   </Box>
                 </Box>
-                <IconButton color="primary" onClick={handleCreateNewPost}>
-                  <SendIcon />
+                <IconButton
+                  color="primary"
+                  onClick={() => {
+                    dispatch(dialogStore.setCreateNewPost(true)); // set loading
+                    handleCreateNewPost();
+                  }}
+                >
+                  {loadingCreateNewPost ? <CircularProgress /> : <SendIcon />}
                 </IconButton>
               </Box>
             </Box>

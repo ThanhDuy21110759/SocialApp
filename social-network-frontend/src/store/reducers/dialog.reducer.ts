@@ -19,6 +19,10 @@ const initialState = {
   ItemProfile: null,
   // number of posts
   numPosts: 0,
+  // loadding when user create new post
+  createNewPost: false,
+  // loading when user voice chat in msg
+  voiceLoading: false,
 } as any;
 
 const dialogSlice = createSlice({
@@ -67,6 +71,14 @@ const dialogSlice = createSlice({
     setNumPosts(state, action: PayloadAction<number>) {
       state.numPosts = action.payload;
     },
+    // set create new post
+    setCreateNewPost(state, action: PayloadAction<boolean>) {
+      state.createNewPost = action.payload;
+    },
+    // set voice loading
+    setVoiceLoading(state, action: PayloadAction<boolean>) {
+      state.voiceLoading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetState, () => {
@@ -88,6 +100,8 @@ export const {
   setSelectedItemProfile,
   setItemProfile,
   setNumPosts,
+  setCreateNewPost,
+  setVoiceLoading,
   addCommentSelectedPost,
 } = dialogSlice.actions;
 
@@ -122,4 +136,6 @@ export const selectIsSelectedItemProfile = (state: any) =>
   state.dialog.isSelectedItemProfile;
 export const selectItemProfile = (state: any) => state.dialog.ItemProfile;
 export const selectNumPosts = (state: any) => state.dialog.numPosts;
+export const selectCreateNewPost = (state: any) => state.dialog.createNewPost;
+export const selectVoiceLoading = (state: any) => state.dialog.voiceLoading;
 export default dialogSlice;

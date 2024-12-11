@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import File from "../pages/Admin/File";
 import MainPage from "../pages/MainPage";
+import Loading from "../components/App/Loading/Loading";
 
 /**  Delay Function **/
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -42,10 +43,12 @@ const AppRouter = () => {
         <Box
           sx={{
             display: "flex",
+            justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <CircularProgress />
+          {/* <CircularProgress /> */}
+          <Loading />
         </Box>
       }
     >

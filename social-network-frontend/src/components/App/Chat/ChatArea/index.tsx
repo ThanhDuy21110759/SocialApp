@@ -5,7 +5,7 @@ import VideoCallRoundedIcon from "@mui/icons-material/VideoCallRounded";
 import { parseCookies } from "nookies";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { chatStore } from "../../../../store/reducers";
+import { chatStore, dialogStore } from "../../../../store/reducers";
 import {
   ChatAreaStyle,
   ChatInputStyle,
@@ -19,6 +19,7 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   FormControl,
   OutlinedInput,
   Typography,
@@ -41,6 +42,7 @@ const ChatArea: React.FC = () => {
   const chatRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
   const chatList = useSelector(chatStore.selectChatList);
+  const voiceLoading = useSelector(dialogStore.selectVoiceLoading);
 
   const selectedUserUUID: {
     online: boolean;
@@ -133,13 +135,16 @@ const ChatArea: React.FC = () => {
   };
   const checkToxicLanguage = async (message: string) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8081/ToxicLanguage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_LLM}ToxicLanguage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message }),
+        }
+      );
 
       if (!response.ok) {
         console.error(
@@ -181,6 +186,7 @@ const ChatArea: React.FC = () => {
 
   // New method for real-time transcription
   const startRecording = async () => {
+    dispatch(dialogStore.setVoiceLoading(true)); // set voice loading
     setTranscript("");
     setNewMessage("");
     if (!transcriptionClient) {
@@ -211,7 +217,8 @@ const ChatArea: React.FC = () => {
         setTranscript(response.text || "");
       }
 
-      // Start recording
+      // Set loading to false after receiving the response
+      dispatch(dialogStore.setVoiceLoading(false));
     };
     recorder.start();
     setIsRecording(true);
@@ -326,11 +333,27 @@ const ChatArea: React.FC = () => {
             onClick={isRecording ? stopRecording : startRecording}
           />
           <FormControl fullWidth sx={{ m: 1 }}>
+            {voiceLoading && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 1,
+                }}
+              >
+                <CircularProgress size={20} />
+              </div>
+            )}
             <OutlinedInput
+              id="outlined-adornment-amount"
               value={newMessage}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder={t("chat.typeMessage")}
+              disabled={voiceLoading}
+              sx={{ opacity: voiceLoading ? 0.3 : 1 }}
             />
           </FormControl>
           <Button

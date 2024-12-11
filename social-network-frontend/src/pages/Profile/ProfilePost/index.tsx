@@ -66,6 +66,7 @@ const ProfilePost = () => {
                     lastUpdateAt={post.createdDateAt}
                     uuid={post.user.uuid}
                     status={post.status}
+                    postId={profilePosts.uuid}
                   />
                   <PostContent
                     messages={fToConvertStringToListString(
@@ -132,6 +133,7 @@ const ProfilePost = () => {
                   lastUpdateAt={selectedPost.createdDateAt}
                   uuid={selectedPost.user.uuid}
                   status={selectedPost.status}
+                  postId={selectedPost.uuid}
                 />
                 <PostContent
                   messages={fToConvertStringToListString(

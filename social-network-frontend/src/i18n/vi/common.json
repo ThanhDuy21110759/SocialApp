@@ -20,7 +20,8 @@
     "home": "Trang chủ",
     "profile": "Hồ sơ",
     "setting": "Cài đặt",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "accessDenied": "Truy cập bị từ chối. Chỉ có quản trị viên mới có thể thực hiện hành động này."
   },
   "table": {
     "fileName": "Tên tệp",

@@ -120,7 +120,7 @@ const MediaPage = () => {
           {activeImageId === image.uuid && (
             <>
               {/* Remove button */}
-              <IconButton
+              {/* <IconButton
                 sx={{
                   position: "absolute",
                   bottom: "8px",
@@ -135,7 +135,7 @@ const MediaPage = () => {
                 onClick={() => handleRemove(image.uuid)}
               >
                 <DeleteIcon />
-              </IconButton>
+              </IconButton> */}
 
               {/* View button */}
               <IconButton

@@ -67,7 +67,7 @@ export default function News({ sx }: { sx?: SxProps }) {
   };
   const summaryLLM = async (message: string) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8081/`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_LLM}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,6 +123,7 @@ export default function News({ sx }: { sx?: SxProps }) {
             lastUpdateAt={post.createdDateAt}
             status={post.status}
             uuid={post.user.uuid}
+            postId={post.uuid}
           />
           <Box
             sx={{
@@ -133,25 +134,25 @@ export default function News({ sx }: { sx?: SxProps }) {
             <Button
               onClick={() => {
                 if (summeryModel) {
-                  handleClosePopup(); // Close the popup
+                  handleClosePopup();
                 } else {
-                  handleOpenPopup(post.content.message); // Open the popup with message
+                  handleOpenPopup(post.content.message);
                 }
               }}
-              variant="contained" // Use "contained" for a filled, modern look
-              size="medium" // Slightly larger size for better visibility
-              startIcon={<Reddit />} // Adds the icon to the left for better alignment
+              variant="contained"
+              size="medium"
+              startIcon={<Reddit />}
               sx={{
-                bgcolor: "primary.main", // Main theme color for the button
-                color: "white", // White text for contrast
-                textTransform: "capitalize", // Prevents all-uppercase text
-                px: 2, // Horizontal padding
-                py: 1, // Vertical padding
-                borderRadius: 2, // Rounded corners for a modern feel
-                boxShadow: 3, // Adds a subtle shadow for depth
+                bgcolor: "primary.main",
+                color: "white",
+                textTransform: "capitalize",
+                px: 2,
+                py: 1,
+                borderRadius: 2,
+                boxShadow: 3,
                 "&:hover": {
-                  bgcolor: "primary.dark", // Darker shade on hover
-                  transform: "scale(1.05)", // Slight zoom effect on hover
+                  bgcolor: "primary.dark",
+                  transform: "scale(1.05)",
                 },
               }}
             >

@@ -146,7 +146,7 @@ const LoginPage: React.FC = () => {
         } else {
           dispatch(
             commonStore.actions.setErrorMessage(
-              "Username or password is incorrect. Please input again."
+              "Login failed. Account blocked or invalid credentials. Contact admin."
             )
           );
         }

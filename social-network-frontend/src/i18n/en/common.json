@@ -20,7 +20,8 @@
     "home": "Home",
     "profile": "Profile",
     "setting": "Setting",
-    "logout": "Logout"
+    "logout": "Logout",
+    "accessDenied": "Access denied. Only administrators can perform this action."
   },
   "table": {
     "fileName": "File Name",

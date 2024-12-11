@@ -29,7 +29,7 @@ const FollowFeed: React.FC = () => {
 
   // pagination
   const [page, setPage] = useState(1);
-  const size = 3;
+  const size = 10;
 
   useEffect(() => {
     dispatch(postStore.TSagaGetFollowPosts(page, size));
@@ -69,6 +69,7 @@ const FollowFeed: React.FC = () => {
                   lastUpdateAt={post.createdDateAt}
                   uuid={post.user.uuid}
                   status={post.status}
+                  postId={post.uuid}
                 />
                 <PostContent
                   messages={fToConvertStringToListString(post.content.message)}
@@ -143,6 +144,7 @@ const FollowFeed: React.FC = () => {
                   lastUpdateAt={selectedPost.createdDateAt}
                   uuid={selectedPost.user.uuid}
                   status={selectedPost.status}
+                  postId={selectedPost.uuid}
                 />
                 <PostContent
                   messages={fToConvertStringToListString(

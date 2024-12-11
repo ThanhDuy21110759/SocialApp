@@ -13,11 +13,12 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, String> {
     Page<Post> findByUUIDContainingIgnoreCase(String UUID, Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.UUID = :UUID")
+    @Query("SELECT p FROM Post p WHERE p.UUID = :UUID AND p.status <> 'HIDDEN'")
     Optional<Post> findByUUID(String UUID);
 
     @Query(value = "SELECT TO_CHAR(created_date_at, 'Day') as day_name, COUNT(*) as post_count " +
             "FROM post " +
+            "WHERE status <> 'HIDDEN'" +
             "GROUP BY TO_CHAR(created_date_at, 'Day'), EXTRACT(DOW FROM created_date_at) " +
             "ORDER BY EXTRACT(DOW FROM created_date_at)",
             nativeQuery = true)
@@ -28,6 +29,7 @@ public interface PostRepository extends JpaRepository<Post, String> {
     FROM post 
     WHERE created_date_at >= date_trunc('week', CURRENT_DATE)
       AND created_date_at < date_trunc('week', CURRENT_DATE) + INTERVAL '7 days'
+      AND status <> 'HIDDEN'
     GROUP BY TO_CHAR(created_date_at, 'Day'), EXTRACT(DOW FROM created_date_at)
     ORDER BY EXTRACT(DOW FROM created_date_at)
     """, nativeQuery = true)
@@ -36,6 +38,6 @@ public interface PostRepository extends JpaRepository<Post, String> {
     @Query("SELECT p.folder FROM Post p WHERE p = :post")
     PostFolder findFolderNameByPost(Post post);
 
-    @Query("SELECT COUNT(p) FROM Post p WHERE p.user.UUID = :uuid")
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.user.UUID = :uuid AND p.status <> 'HIDDEN'")
     Integer countPostByUser(String uuid);
 }

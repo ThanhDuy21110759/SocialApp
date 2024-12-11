@@ -1,4 +1,4 @@
-import { Box, ListItemButton, Typography } from "@mui/material";
+import { Box, Button, ListItemButton, Typography } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -9,7 +9,8 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import DonutSmallIcon from "@mui/icons-material/DonutSmall";
-
+import Person2Icon from "@mui/icons-material/Person2";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import {
   ChildrenPageMenuItem,
   PageMenuItem,
@@ -19,6 +20,7 @@ import { sidebarStore } from "../../../store/reducers";
 import { useTranslation } from "react-i18next";
 import React from "react";
 import Logo from "../Common/Logo/Logo";
+import { useNavigate } from "react-router-dom";
 
 const navIconStyle = {
   width: 18,
@@ -34,6 +36,8 @@ export const menuIconList = {
   donutSmallIcon: <DonutSmallIcon sx={navIconStyle} />,
   settingsIcon: <SettingsIcon sx={navIconStyle} />,
   emailIcon: <EmailIcon sx={navIconStyle} />,
+  person2Icon: <Person2Icon sx={navIconStyle} />,
+  exitToAppIcon: <ExitToAppIcon sx={navIconStyle} />,
 };
 
 const menuItemColor = {
@@ -56,6 +60,7 @@ const SideBarv2: React.FC<SideBarv2Props> = ({
   const mainMenuItemList = useSelector(sidebarStore.selectMainMenuItemList);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const handleOnClickPageMenuItem = (
     item: PageMenuItem | ChildrenPageMenuItem
@@ -84,6 +89,17 @@ const SideBarv2: React.FC<SideBarv2Props> = ({
         (child) => child.name === selectedItem.name
       ) || false
     );
+  };
+
+  const handleLogout = () => {
+    // setOpen(null);
+    const cookies = document.cookie.split(";");
+    cookies.forEach((cookie) => {
+      const cookieName = cookie.split("=")[0].trim();
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
+    // sendDisConnect(uuid);
+    navigate("/auth/login", { replace: true });
   };
 
   const renderChildrenPages = (menuItem: PageMenuItem) => {
@@ -197,7 +213,7 @@ const SideBarv2: React.FC<SideBarv2Props> = ({
 
   return (
     <>
-      <Box sx={{ flex: 1, height: 0, width: "18%" }}>
+      <Box sx={{ flex: 1, height: "100vh", width: "18%", position: "fixed" }}>
         <Box
           sx={{
             display: "flex",
@@ -211,13 +227,85 @@ const SideBarv2: React.FC<SideBarv2Props> = ({
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "left",
             justifyContent: "space-between",
-            height: "100%",
-            zIndex: (theme) => theme.zIndex.drawer + 100,
+            height: "90%",
           }}
         >
-          {renderMainMenu(mainMenuItemList)}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              justifyContent: "space-between",
+              zIndex: (theme) => theme.zIndex.drawer + 100,
+            }}
+          >
+            {renderMainMenu(mainMenuItemList)}
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              zIndex: (theme) => theme.zIndex.drawer + 100,
+            }}
+          >
+            {/* Profile button */}
+            <Button
+              onClick={() => {
+                navigate("/profile", { replace: true });
+              }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                textTransform: "none",
+                padding: 1.5,
+                width: "100%",
+              }}
+            >
+              {menuIconList.person2Icon}
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  marginLeft: 1.5,
+                  color: "#e7a800",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {t("Profile")}
+              </Typography>
+            </Button>
+
+            {/* Logout button */}
+            <Button
+              onClick={() => {
+                handleLogout();
+              }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                textTransform: "none",
+                padding: 1.5,
+                width: "100%",
+              }}
+            >
+              {menuIconList.exitToAppIcon}
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  marginLeft: 1.5,
+                  color: "#e7a800",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {t("Logout")}
+              </Typography>
+            </Button>
+          </Box>
         </Box>
       </Box>
       {/*  */}

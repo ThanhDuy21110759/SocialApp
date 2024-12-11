@@ -31,6 +31,7 @@
     "markdown-react-js": "^1.0.2",
     "material-ui-popup-state": "^5.3.1",
     "mic-recorder-to-mp3": "^2.2.2",
+    "motion": "^11.13.4",
     "net": "^1.0.2",
     "nookies": "^2.5.2",
     "numeral": "^2.0.6",

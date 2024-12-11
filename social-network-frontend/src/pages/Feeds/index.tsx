@@ -88,6 +88,7 @@ const FeedTable = () => {
                   lastUpdateAt={selectedPost.createdDateAt}
                   uuid={selectedPost.user.uuid}
                   status={selectedPost.status}
+                  postId={selectedPost.uuid}
                 />
                 <PostContent
                   messages={fToConvertStringToListString(

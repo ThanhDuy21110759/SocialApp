@@ -16,7 +16,7 @@ import { parseCookies } from "nookies";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { dialogStore } from "../../../store/reducers";
+import { commonStore, dialogStore } from "../../../store/reducers";
 import MenuPopover from "../Common/MenuPopover/MenuPopover";
 
 import { Client, Stomp } from "@stomp/stompjs";
@@ -186,7 +186,13 @@ export default function AccountPopover() {
           <MenuItem
             component={RouterLink}
             to={userRoleCookies === "ROLE_ADMIN" ? "/admin" : "/"}
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              if (userRoleCookies !== "ROLE_ADMIN")
+                dispatch(
+                  commonStore.actions.setErrorMessage(t("account.accessDenied"))
+                );
+            }}
           >
             {t("account.home")}
           </MenuItem>

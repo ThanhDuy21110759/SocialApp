@@ -20,7 +20,8 @@
     "home": "Accueil",
     "profile": "Profil",
     "setting": "Paramètres",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "accessDenied": "Accès refusé. Seuls les administrateurs peuvent effectuer cette"
   },
   "table": {
     "fileName": "Nom du fichier",

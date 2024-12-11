@@ -129,6 +129,14 @@ export const postSlice = createSlice({
     setSize: (state, { payload }: PayloadAction<number>) => {
       state.size = payload;
     },
+    // change status this post to hidden
+    updateStatusPost: (state, { payload }: PayloadAction<any>) => {
+      const { postId, status } = payload;
+      const post = state.posts.find((post) => post.uuid === postId);
+      if (post) {
+        post.status = status;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetState, () => initialState);
@@ -149,6 +157,10 @@ export const TSagaGetFollowPosts = createAction(
   (page: number, size: number) => ({ payload: { page, size } })
 );
 export const createNewPost = createAction(`${name}/CREATE_NEW_POST`);
+export const updateStatusPost = createAction(
+  `${name}/UPDATE_STATUS_POST`,
+  (postId: string, status: string) => ({ payload: { postId, status } })
+);
 export const sagaSetNumPosts = createAction(`${name}/SET_NUM_POSTS`);
 
 // Selectors

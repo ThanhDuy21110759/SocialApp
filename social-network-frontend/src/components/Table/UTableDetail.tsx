@@ -15,7 +15,7 @@ const UTableDetail: React.FC = () => {
 
   // Pagination state
   const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(10);
+  const [perPage, setPerPage] = useState<number>(6);
   const totalItems = listProfile.length;
   const paginatedItems = listProfile.slice(
     (page - 1) * perPage,
@@ -126,27 +126,27 @@ const UTableDetail: React.FC = () => {
         </IconButton>
       ),
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      minWidth: 100,
-      flex: 0.2,
-      renderCell: (params: any) => (
-        <IconButton
-          color="error"
-          onClick={() => console.log("Delete user:", params.row.username)}
-          sx={{
-            backgroundColor: "error.main",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "error.dark",
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-      ),
-    },
+    // {
+    //   field: "delete",
+    //   headerName: "Delete",
+    //   minWidth: 100,
+    //   flex: 0.2,
+    //   renderCell: (params: any) => (
+    //     <IconButton
+    //       color="error"
+    //       onClick={() => console.log("Delete user:", params.row.username)}
+    //       sx={{
+    //         backgroundColor: "error.main",
+    //         color: "white",
+    //         "&:hover": {
+    //           backgroundColor: "error.dark",
+    //         },
+    //       }}
+    //     >
+    //       <DeleteIcon />
+    //     </IconButton>
+    //   ),
+    // },
   ];
 
   return (

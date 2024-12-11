@@ -1,4 +1,7 @@
-import { TSagaGetFriendPosts } from "./../reducers/post.reducer";
+import {
+  TSagaGetFriendPosts,
+  updateStatusPost,
+} from "./../reducers/post.reducer";
 import { parseCookies } from "nookies";
 import { takeEvery } from "redux-saga/effects";
 import { call, put, select } from "typed-redux-saga";
@@ -73,19 +76,32 @@ function* createNewPost() {
   const cookies = parseCookies();
   const accessToken = cookies["accessToken"];
   try {
-    yield* call(fetch, `${process.env.REACT_APP_BACKEND_URL}api/post`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(newPost),
-    });
+    const response = yield* call(
+      fetch,
+      `${process.env.REACT_APP_BACKEND_URL}api/post`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(newPost),
+      }
+    );
     // redirect to home page
     window.location.href = "/";
-    yield* put(
-      commonStore.actions.setSuccessMessage("Post created successfully")
-    );
+    if (response.status === 200) {
+      yield* put(dialogStore.setCreateNewPost(false));
+      yield* put(
+        commonStore.actions.setSuccessMessage("Post created successfully")
+      );
+    } else {
+      yield* put(
+        commonStore.actions.setErrorMessage(
+          "The system is overloaded, please try again in a few minutes."
+        )
+      );
+    }
   } catch (error) {
     yield* put(
       commonStore.actions.setErrorMessage(
@@ -111,7 +127,6 @@ function* fetchProfileFriendPosts(paginate: any) {
       },
     });
     const result = yield* call(() => response.json());
-    console.log("result", result);
     if (page === 1) {
       yield* put(postStore.actions.setFriendPosts(result.data.posts));
     } else {
@@ -167,6 +182,31 @@ function* sagaSetNumPosts() {
   }
 }
 
+function* sagaUpdateStatusPost(postInfo: any) {
+  const { postId, status } = postInfo.payload;
+  const cookies = parseCookies();
+  const accessToken = cookies["accessToken"];
+  try {
+    const URL = `${process.env.REACT_APP_BACKEND_URL}api/post/${postId}?status=${status}`;
+    const response = yield* call(fetch, URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (response.status === 200) {
+      yield* put(postStore.actions.updateStatusPost(postInfo.payload));
+      yield* put(
+        commonStore.actions.setSuccessMessage("Hidden post successfully")
+      );
+    } else
+      yield* put(commonStore.actions.setErrorMessage("Hidden post failed"));
+  } catch (error) {
+    console.error("Failed to change status post:", error);
+  }
+}
+
 function* postSaga() {
   yield takeEvery(postStore.sagaGetPosts, fetchPosts);
   yield takeEvery(postStore.TSagaGetPosts, TSagaGetPosts);
@@ -175,6 +215,7 @@ function* postSaga() {
   yield takeEvery(postStore.TSagaGetFriendPosts, fetchProfileFriendPosts);
   yield takeEvery(postStore.TSagaGetFollowPosts, fetchProfileFollowPosts);
   yield takeEvery(postStore.sagaSetNumPosts, sagaSetNumPosts);
+  yield takeEvery(postStore.updateStatusPost, sagaUpdateStatusPost);
 }
 
 export default postSaga;

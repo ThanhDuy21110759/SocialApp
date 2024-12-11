@@ -26,13 +26,21 @@ const AdminPage = () => {
   return (
     <>
       <HeaderNotification number={3} />
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", height: "100vh" }}>
         <SideBarv2
           open={true}
           userInformation={""}
           onClick={(pageName: string) => setCurrentPage(pageName)}
         />
-        <Box width="80%" sx={{ padding: "20px" }}>
+        <Box
+          width="82%"
+          sx={{
+            padding: "20px",
+            marginLeft: "18%",
+            overflowY: "auto",
+            height: "100vh",
+          }}
+        >
           {renderCurrentPage()}
         </Box>
       </Box>

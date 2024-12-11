@@ -20,7 +20,8 @@
     "home": "Startseite",
     "profile": "Profil",
     "setting": "Einstellungen",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "accessDenied": "Zugriff verweigert. Nur Administratoren können diese Aktion"
   },
   "table": {
     "fileName": "Dateiname",

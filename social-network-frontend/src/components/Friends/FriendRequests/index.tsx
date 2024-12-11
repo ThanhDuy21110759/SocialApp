@@ -102,7 +102,7 @@ const ListRequest = () => {
         >
           {friendRequestList.length === 0 ? (
             <Typography variant="h6" align="center" sx={{ width: "100%" }}>
-              List request is empty
+              {t("friend.listRequestEmpty")}
             </Typography>
           ) : (
             friendRequestList.map((request) => (

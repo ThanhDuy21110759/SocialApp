@@ -2,9 +2,25 @@
 
 This guide provides step-by-step instructions for setting up and running the Social Media Application using Docker Compose. The application consists of two services:
 
-- **Frontend**: Built with React
-- **Backend**: Built with Spring Boot
-- **Database**: PostgreSQL
+#### Frontend
+- **Framework**: React
+- **State Management**: Redux
+- **UI Components**: Material-UI (MUI)
+- **Real-time Communication**: Socket.IO
+
+#### Backend
+- **Framework**: Spring Boot
+- **Additional Integrations**:
+  - **AssemblyAI**: For speech-to-text processing
+  - **LLMs**: Ollama Model 3.2 (1B parameters) for advanced AI capabilities
+
+#### Database
+- **Relational Database**: PostgreSQL
+
+#### Deployment & Infrastructure
+- **Cloud Storage & Services**: Google Cloud Platform (GCP)
+- **Media Management**: Cloudinary
+- **Containerization**: Docker
 
 ## Prerequisites
 

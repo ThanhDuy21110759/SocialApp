@@ -6,10 +6,10 @@ This guide provides step-by-step instructions for setting up and running the Soc
 - **Framework**: React
 - **State Management**: Redux
 - **UI Components**: Material-UI (MUI)
-- **Real-time Communication**: Socket.IO
 
 #### Backend
 - **Framework**: Spring Boot
+- **Real-time Communication**: Socket.IO
 - **Additional Integrations**:
   - **AssemblyAI**: For speech-to-text processing
   - **LLMs**: Ollama Model 3.2 (1B parameters) for advanced AI capabilities
